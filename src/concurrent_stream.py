@@ -88,8 +88,9 @@ class StreamingPrices(gevent.Greenlet):
                         sys.stderr.write(tickMsg.format(now))
 
                         if self.nice:
-                            R = json.dumps(R, indent=2)
-                        O.write(json.dumps(R)+"\n")
+                            O.write(json.dumps(R, indent=2)+"\n")
+                        else:
+                            O.write(json.dumps(R)+"\n")
                         O.flush()
                         gevent.sleep(0)
                         n += 1
@@ -184,7 +185,7 @@ class ChangePoller(gevent.Greenlet):
                     O.write("------------\n" + json.dumps(R, indent=2)+"\n")
                     O.flush()
                     n += 1
-                    if n > self.maxpoll:
+                    if self.maxpoll and n > self.maxpoll:
                         sys.stderr.write("max changes polled\n")
                         break
 
