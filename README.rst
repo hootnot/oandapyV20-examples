@@ -37,5 +37,8 @@ Examples
 =============================  =============
 Source                         Description
 =============================  =============
+**Streams**
+`src/streaming_prices`         Simple streaming prices
+`src/streaming_trans.py`       Simple streaming transactions
 `src/concurrent_streaming.py`  Demonstrate concurrent streaming of prices and events along with the polling of account changes based on gevent greenlets
 =============================  =============
