@@ -43,4 +43,7 @@ Source                         Description
 `src/concurrent_streaming.py`  Demonstrate concurrent streaming of prices and events along with the polling of account changes based on gevent greenlets
 **Data**
 `src/candle-data.py`           Retrieve candle data
+**Orders**
+`src/market_order.py`          Placing market orders / logging
+`src/market_order_request.py`  Placing market orders using contrib.requests / logging
 =============================  =============
