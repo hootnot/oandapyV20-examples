@@ -1,12 +1,15 @@
-# oandapyV20 - examples
+oandapyV20 - examples
+=====================
 
 This repo contains a number of examples to demonstrate how to
 use OANDA's REST-V20 API with the _oandapyV20_ Python API-wrapper.
 
 
-## Setup
+Setup
+-----
 
-### Token
+Token
+~~~~~
 
 Access to the OANDA REST-API requires a token. If you do not have a token
 you can obtain one. Check developer.oanda.com_ for details.
@@ -14,7 +17,8 @@ Edit the file *token.txt*  and put the token in it.
 
 .. _developer.oanda.com: http://developer.oanda.com
 
-### AccountID
+AccountID
+~~~~~~~~~
 
 If you have a token, you have an account. Edit the file *account.txt* and
 put the **accountID** in it.
@@ -25,10 +29,12 @@ put the **accountID** in it.
    Leveraged trading is high risk. Losses can exceed investment.
 
 
-## Examples
+Examples
+--------
+
 
 =============================  =============
-Source  Description 
+Source                         Description
 =============================  =============
 `src/concurrent_streaming.py`  Demonstrate concurrent streaming of prices and events along with the polling of account changes based on gevent greenlets
 =============================  =============
