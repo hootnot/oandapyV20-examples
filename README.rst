@@ -2,8 +2,9 @@ oandapyV20 - examples
 =====================
 
 This repo contains a number of examples to demonstrate how to
-use OANDA's REST-V20 API with the _oandapyV20_ Python API-wrapper.
+use OANDA's REST-V20 API with the oandapyV20_ Python API-wrapper.
 
+.. _oandapyV20: https://github.com/hootnot/oanda-api-v20
 
 Setup
 -----
