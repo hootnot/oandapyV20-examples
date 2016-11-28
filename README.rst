@@ -46,4 +46,5 @@ Source                         Description
 **Orders**
 `src/market_order.py`          Placing market orders / logging
 `src/market_order_request.py`  Placing market orders using contrib.requests / logging
+`src/contrib_mo_tp_sl.py`      Placing market order with takeprofit on-fill and stoploss on-fill
 =============================  =============
