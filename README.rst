@@ -9,10 +9,22 @@ use OANDA's REST-V20 API with the oandapyV20_ Python API-wrapper.
 Setup
 -----
 
+Install
+~~~~~~~
+
+Install *oandapyV20*:
+
+.. code-block:: bash
+
+   $ pip install oandapyV20
+
+For other install options see: oandapyV20_.
+
+
 Token
 ~~~~~
 
-Access to the OANDA REST-API requires a token. If you do not have a token
+Access to the OANDA V20 REST-API requires a token. If you do not have a token
 you can obtain one. Check developer.oanda.com_ for details.
 Edit the file *token.txt*  and put the token in it.
 
@@ -24,10 +36,11 @@ AccountID
 If you have a token, you have an account. Edit the file *account.txt* and
 put the **accountID** in it.
 
-.. warning::
+**Warning**
+~~~~~~~~~~~
 
    Make sure you have made the setup based on a **practice** account !
-   Leveraged trading is high risk. Losses can exceed investment.
+   Leveraged trading is high risk. Losses can exceed investment!
 
 
 Examples
