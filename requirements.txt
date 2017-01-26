@@ -2,4 +2,5 @@ oandapyV20>=0.2.2
 gevent
 urwid
 urwidtrees
+urwid-geventloop
 pyyaml
