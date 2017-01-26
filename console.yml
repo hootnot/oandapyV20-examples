@@ -1,0 +1,73 @@
+---
+palette:
+   banner:
+     foreground: black
+     background: light gray
+   streak:
+     foreground: black
+     background: dark red
+   red:
+     foreground: black
+     background: dark red
+   green:
+     foreground: black
+     background: dark green
+   bg:
+     foreground: white
+     background: dark blue
+   body:
+     foreground: black
+     background: light gray
+   focus:
+     foreground: light gray
+     background: dark blue 
+     mono: standout
+   bars:
+     foreground: dark blue
+     background: light gray
+   arrowtip:
+     foreground: light blue
+     background: light gray
+   connectors:
+     foreground: light red
+     background: light gray
+  
+instruments:
+  - primary:
+    - DE30_EUR
+    - NL25_EUR
+    - UK100_GBP
+    - FR40_EUR
+    - EU50_EUR
+    - JP225_USD
+    - HK33_HKD
+  - currencies:
+    - EUR_USD
+    - EUR_JPY
+    - EUR_GBP
+    - EUR_AUD
+    - EUR_CHF
+  - currencies2:
+    - USD_JPY
+    - EUR_SEK
+    - EUR_NOK
+    - EUR_TRY
+  - usa:
+    - US30_USD
+    - SPX500_USD
+    - NAS100_USD
+  - commodities:
+    - NATGAS_USD
+    - BCO_USD
+    - XAU_USD
+  - bonds:
+    - DE10YB_EUR
+    - USB30Y_USD
+    - USB10Y_USD
+trading:
+  DE30_EUR:
+    units: 50
+    defaultStop: 1%
+  EUR_USD:
+    units: 100000
+    defaultStop: 1%

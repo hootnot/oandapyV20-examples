@@ -46,6 +46,11 @@ put the **accountID** in it.
 Examples
 --------
 
+oandapyV20 console demo:
+
+.. |CONSOLE_APP| image:: oanda_console.gif
+   :width: 500px
+
 
 =============================  =============
 Source                         Description
@@ -60,4 +65,8 @@ Source                         Description
 `src/market_order.py`          Placing market orders / logging
 `src/market_order_request.py`  Placing market orders using contrib.requests / logging
 `src/contrib_mo_tp_sl.py`      Placing market order with takeprofit on-fill and stoploss on-fill
+**Console**
+`src/oanda_console.py`         Console application showing realtime tickdata
+
+                               |CONSOLE_APP|
 =============================  =============
