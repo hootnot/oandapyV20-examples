@@ -19,7 +19,8 @@ Clone the repository:
    $ git clone https://github.com/hootnot/oandapyV20-examples
 
 
-Install *oandapyV20* and other pypi-packages the examples depend on:
+Install *oandapyV20* and other pypi-packages the examples depend on. Maybe
+you want to do this from a *virtual environment*.
 
 .. code-block:: bash
 
