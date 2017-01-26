@@ -12,13 +12,19 @@ Setup
 Install
 ~~~~~~~
 
-Install *oandapyV20*:
+Clone the repository:
 
 .. code-block:: bash
 
-   $ pip install oandapyV20
+   $ git clone https://github.com/hootnot/oandapyV20-examples
 
-For other install options see: oandapyV20_.
+
+Install *oandapyV20* and other pypi-packages the examples depend on:
+
+.. code-block:: bash
+
+   $ pip install -r requirements.txt
+
 
 
 Token
