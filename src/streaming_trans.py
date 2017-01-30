@@ -15,7 +15,7 @@ print("read from stream until {} transactions received".format(MAXTRANS))
 try:
     n = 0
     for R in api.request(s):
-        print R
+        print(R)
         n += 1
         if n > MAXTRANS:
             s.terminate("max transactions received")
