@@ -5,3 +5,4 @@ urwid
 urwidtrees
 urwid-geventloop
 pyyaml
+six
