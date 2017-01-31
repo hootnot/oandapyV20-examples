@@ -80,6 +80,7 @@ class StreamingPrices(gevent.Greenlet):
                     accountID=accountID,
                     params={"instruments": ",".join(self.instruments)})
 
+            se = None   # to save the exception if it occurs
             with open("prices.txt", "a") as O:
                 n = 0
                 try:
@@ -99,6 +100,7 @@ class StreamingPrices(gevent.Greenlet):
 
                 except V20Error as e:
                     # catch API related errors that may occur
+                    se = e   # save for reraise
                     with open("LOG", "a") as LOG:
                         LOG.write("V20Error: {} {}\n".format(e, n))
                     break
@@ -109,16 +111,18 @@ class StreamingPrices(gevent.Greenlet):
                         time.sleep(3)
 
                 except StreamTerminated as e:
+                    se = e   # save for reraise
                     with open("LOG", "a") as LOG:
                         LOG.write("Stopping: {} {}\n".format(e, n))
                     break
 
                 except Exception as e:
+                    se = e   # save for reraise
                     with open("LOG", "a") as LOG:
                         LOG.write("??? : {} {}\n".format(e, n))
                     break
 
-        raise e
+        raise se
 
 
 class StreamingEvents(gevent.Greenlet):
@@ -222,6 +226,9 @@ p_stream.start()
 r = AccountSummary(accountID=accountID)
 try:
     rv = api.request(r)
+except V20Error as e:
+    print("V20Error : {} {}".format(e.status_code, e.msg))
+    exit(2)
 except Exception as e:
     print("Definitely something wrong: {}".format(e))
     exit(2)
