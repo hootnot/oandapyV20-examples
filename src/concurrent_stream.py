@@ -227,7 +227,7 @@ r = AccountSummary(accountID=accountID)
 try:
     rv = api.request(r)
 except V20Error as e:
-    print("V20Error : {} {}".format(e.status_code, e.msg))
+    print("V20Error : {} {}".format(e.code, e.msg))
     exit(2)
 except Exception as e:
     print("Definitely something wrong: {}".format(e))
