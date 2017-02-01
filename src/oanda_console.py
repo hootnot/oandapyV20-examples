@@ -36,6 +36,8 @@ urwid repos: urwid and urwidtrees.
 THIS PROGRAM IS SOLELY FOR DEMONSTRATION PURPOSE
 """
 import urwid
+import subprocess
+import logging
 from collections import OrderedDict
 import gevent
 from urwid_geventloop import GeventLoop
@@ -46,6 +48,7 @@ from gevent.queue import Queue
 from gevent import monkey
 
 from oandapyV20 import API
+from oandapyV20.exceptions import V20Error
 from exampleauth import exampleAuth
 from datetime import datetime
 
@@ -59,9 +62,16 @@ import six
 
 monkey.patch_all()
 
+logging.basicConfig(
+    filename="./console.log",
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s : %(message)s',
+)
+
+logger = logging.getLogger(__name__)
+
 
 # greenlets ...
-
 class WidgetUpdate(gevent.Greenlet):
     """Greenlet to update the widgets based on queue information."""
 
@@ -119,6 +129,7 @@ class WidgetUpdate(gevent.Greenlet):
         TIME = ("%s" % datetime.now())[11:22]
         snapshot = None
         n = 0
+        se = None  # Saved exception
         while True:
             try:
                 if not self.q_nav.empty():
@@ -142,15 +153,20 @@ class WidgetUpdate(gevent.Greenlet):
                 s = s.format(NAV=float(NAV), time=TIME[11:22])
                 self.widget["header"].set_text(('bg', s))
 
+            except V20Error as e:
+                logging.error("V20Error: code: %s msg: %s loop count: %d",
+                              e.code, e.msg, n)
+                break
+
             except Exception as e:
-                with open("LOG", "a") as LOG:
-                    LOG.write("??? : {} {}\n".format(e, n))
+                se = e  # save the exception to be able to re-raise it
+                logging.error("??? : %s loop count: %d", e, n)
                 break
 
             n += 1
             gevent.sleep(0)
 
-        # raise e
+        # raise se
 
 
 class FocusableText(urwid.WidgetWrap):
@@ -339,7 +355,7 @@ if __name__ == "__main__":
     acctsum = GAccountDetails(api=api,
                               accountID=accountID,
                               queue=Q_NAV,
-                              sleepTime=0)
+                              sleepTime=1)
     acctsum.start()
     gr.add(acctsum)
 
@@ -355,8 +371,6 @@ if __name__ == "__main__":
     try:
         loop.run()
     except urwid.ExitMainLoop:
-        import subprocess
-        subprocess.call("clear", shell=True)
-    else:
-        import subprocess
-        subprocess.call("clear", shell=True)
+        pass
+
+    subprocess.call("clear", shell=True)
