@@ -15,13 +15,14 @@ Example:
   concurrent_stream.py --nice --pollcount 10 --instr EUR_USD --instr EUR_JPY
 """
 import sys
+import os
 import argparse
 import json
 import gevent
 from gevent.pool import Group
-from gevent.pool import Pool
 from gevent import monkey
 import time
+import logging
 
 from oandapyV20 import API
 from oandapyV20.exceptions import V20Error, StreamTerminated
@@ -62,6 +63,14 @@ api = API(access_token=access_token,
           environment="practice",
           request_params=request_params)
 
+logging.basicConfig(
+    filename="./concurrent.log",
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s : %(message)s',
+)
+
+logger = logging.getLogger(__name__)
+
 
 # The greenlets ...
 class StreamingPrices(gevent.Greenlet):
@@ -101,28 +110,24 @@ class StreamingPrices(gevent.Greenlet):
                 except V20Error as e:
                     # catch API related errors that may occur
                     se = e   # save for reraise
-                    with open("LOG", "a") as LOG:
-                        LOG.write("V20Error: {} {}\n".format(e, n))
+                    logger.error("V20Error: %s %d", e, n)
                     break
 
                 except ConnectionError as e:
-                    with open("LOG", "a") as LOG:
-                        LOG.write("Error: {} {}\n".format(e, n))
-                        time.sleep(3)
+                    logger.error("ConnectionError: %s %d", e, n)
+                    time.sleep(3)
 
                 except StreamTerminated as e:
                     se = e   # save for reraise
-                    with open("LOG", "a") as LOG:
-                        LOG.write("Stopping: {} {}\n".format(e, n))
+                    logger.error("StreamTerminated: %s %d", e, n)
                     break
 
                 except Exception as e:
                     se = e   # save for reraise
-                    with open("LOG", "a") as LOG:
-                        LOG.write("??? : {} {}\n".format(e, n))
+                    logger.error("Some exception: %s %d", e, n)
                     break
 
-        raise se
+        # raise se
 
 
 class StreamingEvents(gevent.Greenlet):
@@ -149,14 +154,12 @@ class StreamingEvents(gevent.Greenlet):
                             r.terminate("maxrecs received: {}".format(self.m))
 
                 except StreamTerminated as e:
-                    with open("LOG", "a") as LOG:
-                        LOG.write("Stopping: {} {}\n".format(e, n))
+                    logger.error("StreamTerminated: %s %d", e, n)
                     # re-raise
                     raise e
 
                 except Exception as e:
-                    with open("LOG", "a") as LOG:
-                        LOG.write("{} {}\n".format(e, n))
+                    logger.error("Some exception: %s %d", e, n)
 
 
 class ChangePoller(gevent.Greenlet):
@@ -178,8 +181,7 @@ class ChangePoller(gevent.Greenlet):
                 R = api.request(r)
 
             except Exception as e:
-                with open("LOG", "a") as LOG:
-                    LOG.write("{} {}\n".format(e, n))
+                logger.error("Some exception: %s %d", e, n)
 
             else:
                 fName = "changes.{}.txt".format(self.sinceTransactionID)
@@ -209,6 +211,7 @@ gr = Group()
 
 def events_exceptionhandler(g):
     """create a new greenlet."""
+    logger.info("restart greenlet %s", g.__class__.__name__)
     print("Restart {}".format(g.__class__.__name__))
     x = g.__class__(m=5)
     gr.discard(g)
@@ -216,6 +219,7 @@ def events_exceptionhandler(g):
     x.start()
     gr.add(x)
     gr.join()
+
 
 p_stream = StreamingPrices(instruments=clargs.instruments,
                            nice=clargs.nice,
@@ -227,10 +231,14 @@ r = AccountSummary(accountID=accountID)
 try:
     rv = api.request(r)
 except V20Error as e:
+    logger.error("V20Error %s %s", e.code, e.msg)
     print("V20Error : {} {}".format(e.code, e.msg))
     exit(2)
 except Exception as e:
-    print("Definitely something wrong: {}".format(e))
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    logger.error("Generic exception %s %s %s",
+                 exc_type, fname, exc_tb.tb_lineno)
     exit(2)
 else:
     since = rv["lastTransactionID"]
