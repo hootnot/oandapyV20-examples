@@ -41,7 +41,7 @@ AccountID
 ~~~~~~~~~
 
 If you have a token, you have an account. Edit the file *account.txt* and
-put the **accountID** in it.
+put the **accountID** in it. Verify that it is your **V20** accountID!
 
 **Warning**
 ~~~~~~~~~~~
@@ -50,10 +50,15 @@ put the **accountID** in it.
    Leveraged trading is high risk. Losses can exceed investment!
 
 
+
 Examples
 --------
 
-oandapyV20 console demo:
+All examples can be run from the cloned repo directory as:
+
+.. code-block:: bash
+
+   $ python src/<example.py>
 
 .. |CONSOLE_APP| image:: oanda_console.gif
    :width: 500px
