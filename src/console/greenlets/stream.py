@@ -5,6 +5,9 @@ import time
 from oandapyV20.endpoints.pricing import PricingStream
 from oandapyV20.exceptions import V20Error, StreamTerminated
 from requests.exceptions import ConnectionError
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GStreamingPrices(gevent.Greenlet):
@@ -21,6 +24,7 @@ class GStreamingPrices(gevent.Greenlet):
 
     def _run(self):
 
+        se = None  # save exception for reraise
         while True:
             # setup the stream-request
             r = PricingStream(
@@ -37,23 +41,22 @@ class GStreamingPrices(gevent.Greenlet):
 
             except V20Error as e:
                 # catch API related errors that may occur
-                with open("LOG", "a") as LOG:
-                    LOG.write("V20Error: {} {}\n".format(e, n))
+                se = e
+                logger.error("V20Error: %s %s %d", e.code, e.msg, n)
                 break
 
             except ConnectionError as e:
-                with open("LOG", "a") as LOG:
-                    LOG.write("Error: {} {}\n".format(e, n))
-                    time.sleep(3)
+                logger.error("ConnectionError: %s %d", e, n)
+                time.sleep(3)
 
             except StreamTerminated as e:
-                with open("LOG", "a") as LOG:
-                    LOG.write("Stopping: {} {}\n".format(e, n))
+                se = e
+                logger.error("StreamTerminated: %s %d", e, n)
                 break
 
             except Exception as e:
-                with open("LOG", "a") as LOG:
-                    LOG.write("??? : {} {}\n".format(e, n))
+                se = e
+                logger.error("Exception: %s %d", e, n)
                 break
 
-        raise e
+        raise se
