@@ -79,6 +79,8 @@ Source                         Description
 `src/contrib_mo_tp_sl.py`      Placing market order with takeprofit on-fill and stoploss on-fill
 **Console**
 `src/oanda_console.py`         Console application showing realtime tickdata
-
                                |CONSOLE_APP|
+**Auto Trading**
+`src/simplebot.py`             Simple trading bot based on a moving-average crossover. The bot gets initialized by retrieving the longest MA period of candles. After that new records are fabricated from the stream. When there is a state change an order is placed with a takeprofit and a stoploss order with it. 
+                               The positions can be traced with the `src/oanda_console` application.
 =============================  =============
