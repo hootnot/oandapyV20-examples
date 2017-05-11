@@ -84,3 +84,19 @@ Source                         Description
 `src/simplebot.py`             Simple trading bot based on a moving-average crossover. The bot gets initialized by retrieving the longest MA period of candles. After that new records are fabricated from the stream. When there is a state change an order is placed with a takeprofit and a stoploss order with it. 
                                The positions can be traced with the `src/oanda_console` application.
 =============================  =============
+
+About this software
+-------------------
+The *oanda-api-v20* / *oandapyV20* software is a personal project.
+I have no prior or existing relationship with OANDA.
+
+If you have any questions regarding this software, please take a look at
+the documentation first:
+
+ * oandapyV20 : http://oanda-api-v20.readthedocs.io/en/latest/?badge=latest
+ * OANDA developer docs : http://developer.oanda.com
+ * examples : https://github.com/hootnot/oandapyV20-examples
+ * Github: https://github.com/hootnot/oanda-api-v20 check the open and closed issues
+
+If you still have questions/issues you can open an *issue* on Gitub: https://github.com/hootnot/oanda-api-v20
+
