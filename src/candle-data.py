@@ -17,6 +17,7 @@ from oandapyV20.exceptions import V20Error
 import oandapyV20.endpoints.instruments as instruments
 from oandapyV20.definitions.instruments import CandlestickGranularity
 from exampleauth import exampleAuth
+import re
 
 price = ['M', 'B', 'A', 'BA', 'MBA']
 granularities = CandlestickGranularity().definitions.keys()
@@ -27,8 +28,10 @@ parser.add_argument('--count', default=0, type=int,
                     help='num recs, if not specified 500')
 parser.add_argument('--granularity', choices=granularities, required=True)
 parser.add_argument('--price', choices=price, default='M', help='Mid/Bid/Ask')
-parser.add_argument('--start', type=str, help="date-time YYYY-MM-DDTHH:MM:SS")
-parser.add_argument('--end', type=str, help="date-time YYYY-MM-DDTHH:MM:SS")
+parser.add_argument('--from', dest="From", type=str,
+                    help="YYYY-MM-DDTHH:MM:SSZ (ex. 2016-01-01T00:00:00Z)")
+parser.add_argument('--to', type=str,
+                    help="YYYY-MM-DDTHH:MM:SSZ (ex. 2016-01-01T00:00:00Z)")
 parser.add_argument('--instruments', type=str, nargs='?',
                     action='append', help='instruments')
 
@@ -40,6 +43,10 @@ class Main(object):
         self.api = api
 
     def main(self):
+        def check_date(s):
+            dateFmt = "[\d]{4}-[\d]{2}-[\d]{2}T[\d]{2}:[\d]{2}:[\d]{2}Z"
+            if not re.match(dateFmt, s):
+                raise ValueError("Incorrect date format: ", s)
 
         if self.clargs.instruments:
             params = {}
@@ -47,10 +54,10 @@ class Main(object):
                 params.update({"granularity": self.clargs.granularity})
             if self.clargs.count:
                 params.update({"count": self.clargs.count})
-            if self.clargs.start:
-                params.update({"from": self.clargs.start})
-            if self.clargs.end:
-                params.update({"to": self.clargs.end})
+            if self.clargs.From and check_date(self.clargs.From):
+                params.update({"from": self.clargs.From})
+            if self.clargs.to and check_date(self.clargs.to):
+                params.update({"to": self.clargs.to})
             if self.clargs.price:
                 params.update({"price": self.clargs.price})
             for i in self.clargs.instruments:
@@ -72,5 +79,7 @@ if __name__ == "__main__":
         m.main()
     except V20Error as v20e:
         print("ERROR {} {}".format(v20e.code, v20e.msg))
+    except ValueError as e:
+        print("{}".format(e))
     except Exception as e:
         print("Unkown error: {}".format(e))
