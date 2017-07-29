@@ -48,6 +48,8 @@ class Main(object):
             if not re.match(dateFmt, s):
                 raise ValueError("Incorrect date format: ", s)
 
+            return True
+
         if self.clargs.instruments:
             params = {}
             if self.clargs.granularity:
