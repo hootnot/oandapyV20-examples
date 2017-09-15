@@ -382,7 +382,7 @@ if __name__ == "__main__":
     parser.add_argument('--units', type=int, required=True)
 
     clargs = parser.parse_args()
-    bot = BotTrader(instrument="DE30_EUR",
+    bot = BotTrader(instrument=clargs.instrument,
                     granularity="M1",
                     units=clargs.units, clargs=clargs)
     bot.run()
