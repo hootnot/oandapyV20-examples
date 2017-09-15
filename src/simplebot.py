@@ -286,18 +286,18 @@ class BotTrader(object):
                         mapstate(self.state))
             units *= (1 if self.state == LONG else -1)
             self.close()
-            self.order()
+            self.order(units)
 
-    def order(self):
+    def order(self, units):
         mop = {"instrument": self.pt.instrument,
-               "units": self.units}
+               "units": units}
 
         def frmt(v):
             # format a number over 6 digits: 12004.1, 1.05455
             l = len(str(v).split(".")[0])
             return "{{:{}.{}f}}".format(l, 6-l).format(v)
 
-        direction = 1 if self.units > 0 else -1
+        direction = 1 if units > 0 else -1
         if self.clargs.takeProfit:   # takeProfit specified? add it
             tpPrice = self.pt._c[self.pt.idx-1] * \
                       (1.0 + (self.clargs.takeProfit/100.0) * direction)
@@ -382,7 +382,7 @@ if __name__ == "__main__":
     parser.add_argument('--units', type=int, required=True)
 
     clargs = parser.parse_args()
-    bot = BotTrader(instrument="DE30_EUR",
+    bot = BotTrader(instrument=clargs.instrument,
                     granularity="M1",
                     units=clargs.units, clargs=clargs)
     bot.run()
