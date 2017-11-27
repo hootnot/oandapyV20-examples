@@ -67,6 +67,8 @@ All examples can be run from the cloned repo directory as:
 =============================  =============
 Source                         Description
 =============================  =============
+**Account**
+`src/instruments_list.py`      Get list of tradable instruments for account
 **Streams**
 `src/streaming_prices.py`      Simple streaming prices
 `src/streaming_trans.py`       Simple streaming transactions
