@@ -383,6 +383,6 @@ if __name__ == "__main__":
 
     clargs = parser.parse_args()
     bot = BotTrader(instrument=clargs.instrument,
-                    granularity="M1",
+                    granularity=clargs.granularity,
                     units=clargs.units, clargs=clargs)
     bot.run()
