@@ -1,4 +1,4 @@
-requests==2.12.4
+requests>=2.20.0
 oandapyV20>=0.2.2
 gevent
 urwid
