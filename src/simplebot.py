@@ -377,12 +377,12 @@ if __name__ == "__main__":
                         help='stop loss value as a percentage of entryvalue')
     parser.add_argument('--takeProfit', default=0.5, type=float,
                         help='take profit value as a percentage of entryvalue')
-    parser.add_argument('--instrument', type=str, help='instrument')
+    parser.add_argument('--instrument', type=str, help='instrument', required=True)
     parser.add_argument('--granularity', choices=granularities, required=True)
     parser.add_argument('--units', type=int, required=True)
 
     clargs = parser.parse_args()
     bot = BotTrader(instrument=clargs.instrument,
-                    granularity="M1",
+                    granularity=clargs.granularity,
                     units=clargs.units, clargs=clargs)
     bot.run()
