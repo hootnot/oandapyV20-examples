@@ -35,12 +35,15 @@ urwid repos: urwid and urwidtrees.
 
 THIS PROGRAM IS SOLELY FOR DEMONSTRATION PURPOSE
 """
+import sys
 import urwid
 import subprocess
 import logging
 from collections import OrderedDict
 import gevent
-from urwid_geventloop import GeventLoop
+if sys.version_info.major == 2:
+    print("python 3.x is required for this application")
+    exit(2)
 
 # ------------------------------------
 from gevent.pool import Group
@@ -367,7 +370,7 @@ if __name__ == "__main__":
 
     # gr.join()
     loop = urwid.MainLoop(layout, cfg.palette, unhandled_input=exit_on_q,
-                          event_loop=GeventLoop())
+                          event_loop=urwid.AsyncioEventLoop())
     try:
         loop.run()
     except urwid.ExitMainLoop:
