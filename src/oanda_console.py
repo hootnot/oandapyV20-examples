@@ -41,6 +41,8 @@ import subprocess
 import logging
 from collections import OrderedDict
 import gevent
+from gevent import monkey
+monkey.patch_all()
 if sys.version_info.major == 2:
     print("python 3.x is required for this application")
     exit(2)
@@ -48,7 +50,6 @@ if sys.version_info.major == 2:
 # ------------------------------------
 from gevent.pool import Group
 from gevent.queue import Queue
-from gevent import monkey
 
 from oandapyV20 import API
 from oandapyV20.exceptions import V20Error
@@ -61,9 +62,7 @@ from urwidtrees.tree import SimpleTree
 # from urwidtrees.decoration import ArrowTree, CollapsibleArrowTree
 from urwidtrees.decoration import CollapsibleIndentedTree
 from console.greenlets import GAccountDetails, GStreamingPrices
-import six
 
-monkey.patch_all()
 
 logging.basicConfig(
     filename="./console.log",
@@ -248,7 +247,7 @@ def instrument_tree(instruments, selectable_nodes=True):
     tree = (Text('Instruments    Bid       Ask       Time        Result'), [])
 
     # add instruments as children
-    for i, V in six.iteritems(instruments):
+    for i, V in instruments.items():
         subtree = (FocusableNode(V), [])
 
         # and grandchildren.. orders / pos
@@ -338,7 +337,7 @@ if __name__ == "__main__":
                          footer=low["footer"])
 
     # add all the instrument widgets to the low (list of widgets)
-    [low.update({k: v}) for k, v in six.iteritems(loIw)]
+    [low.update({k: v}) for k, v in loIw.items()]
 
     # ----------------------------------------------------------------
     # manage asynchronous tasks
