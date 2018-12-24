@@ -62,7 +62,6 @@ from urwidtrees.tree import SimpleTree
 # from urwidtrees.decoration import ArrowTree, CollapsibleArrowTree
 from urwidtrees.decoration import CollapsibleIndentedTree
 from console.greenlets import GAccountDetails, GStreamingPrices
-import six
 
 
 logging.basicConfig(
@@ -248,7 +247,7 @@ def instrument_tree(instruments, selectable_nodes=True):
     tree = (Text('Instruments    Bid       Ask       Time        Result'), [])
 
     # add instruments as children
-    for i, V in six.iteritems(instruments):
+    for i, V in instruments.items():
         subtree = (FocusableNode(V), [])
 
         # and grandchildren.. orders / pos
@@ -338,7 +337,7 @@ if __name__ == "__main__":
                          footer=low["footer"])
 
     # add all the instrument widgets to the low (list of widgets)
-    [low.update({k: v}) for k, v in six.iteritems(loIw)]
+    [low.update({k: v}) for k, v in loIw.items()]
 
     # ----------------------------------------------------------------
     # manage asynchronous tasks
