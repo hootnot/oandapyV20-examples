@@ -41,6 +41,8 @@ import subprocess
 import logging
 from collections import OrderedDict
 import gevent
+from gevent import monkey
+monkey.patch_all()
 if sys.version_info.major == 2:
     print("python 3.x is required for this application")
     exit(2)
@@ -48,7 +50,6 @@ if sys.version_info.major == 2:
 # ------------------------------------
 from gevent.pool import Group
 from gevent.queue import Queue
-from gevent import monkey
 
 from oandapyV20 import API
 from oandapyV20.exceptions import V20Error
@@ -63,7 +64,6 @@ from urwidtrees.decoration import CollapsibleIndentedTree
 from console.greenlets import GAccountDetails, GStreamingPrices
 import six
 
-monkey.patch_all()
 
 logging.basicConfig(
     filename="./console.log",
