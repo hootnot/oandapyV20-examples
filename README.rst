@@ -5,6 +5,7 @@ This repo contains a number of examples to demonstrate how to
 use OANDA's REST-V20 API with the oandapyV20_ Python API-wrapper.
 
 .. _oandapyV20: https://github.com/hootnot/oanda-api-v20
+.. _pydantic: https://github.com/samuelcolvin/pydantic
 
 Setup
 -----
@@ -70,7 +71,7 @@ Source                         Description
 **Account**
 `src/instruments_list.py`      Get list of tradable instruments for account
 **Streams**
-`src/streaming_prices.py`      Simple streaming prices
+`src/streaming_prices.py`      Simple streaming prices using pydantic_ to process records
 `src/streaming_trans.py`       Simple streaming transactions
 `src/concurrent_streaming.py`  Demonstrate concurrent streaming of prices and events along with the polling of account changes based on gevent greenlets
 **Data**

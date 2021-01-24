@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Streaming price data.
 
-demonstrate the PricingStream request.
+demonstrate the PricingStream request and convenient handling of data using Pydantic.
 
 Usage:
     streaming_prices.py --instrument <instrument> [--instrument <instrument>] [--nice] [--timeout <timeout>] [--count <count>]
@@ -18,6 +18,9 @@ from oandapyV20.endpoints.pricing import PricingStream
 from exampleauth import exampleAuth
 from requests.exceptions import ConnectionError
 import logging
+from typing import List
+from pydantic import BaseModel
+from datetime import datetime
 
 
 logging.basicConfig(
@@ -27,6 +30,28 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
+
+
+class HeartBeat(BaseModel):
+    type: str
+    time: datetime
+
+
+class Price(BaseModel):
+    price: float
+    liquidity: int
+
+
+class PriceRecord(BaseModel):
+    instrument: str
+    type: str
+    time: datetime
+    closeoutBid: float
+    closeoutAsk: float
+    status: str
+    tradeable: bool
+    bids: List[Price]
+    asks: List[Price]
 
 
 def main(clargs):
@@ -48,15 +73,20 @@ def main(clargs):
                       params={"instruments": ",".join(clargs['<instrument>'])})
 
     n = 0
+    _m = {"PRICE": PriceRecord,
+          "HEARTBEAT": HeartBeat}
+
     while True:
         try:
-            for R in api.request(r):
-                if clargs['--nice']:
-                    R = json.dumps(R, indent=2)
-                print(R)
+            for rv in api.request(r):
+                # create a Pydantic record based on the type
+                rec = _m[rv['type']](**rv)
+
                 n += 1
                 if MAXREC and n >= MAXREC:
                     r.terminate("maxrecs received: {}".format(MAXREC))
+
+                print(rec.json() if clargs['--nice'] else rec)
 
         except V20Error as e:
             # catch API related errors that may occur
